@@ -12,6 +12,13 @@ Hope that's alright.
 Derek Martin
 
 ------------
+To get this running:
+- create a database called 'parkinglot' with default collation: utf8_general_ci, accessible by root with no password
+- composer install
+- php artisan migrate
+- php artisan db:seed
+
+------------
 
 ## Scenario:
 
