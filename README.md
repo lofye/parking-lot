@@ -17,6 +17,7 @@ say, but I've never had an entire team working that way, and it sounds awesome.
 Lastly, I have always been the one pushing agile wherever I've worked. Usually, they just put up with me. Nobody on the
 team was really into it. When you don't have buy-in from the team, it doesn't work very well. I have only worked one
 place (Achievers.com) that really did agile, and it was energizing. I would *really* like to do that again.
+
 I see vehikl as a place that I can experience tremendous growth, and do the best work of my life.
 I hope I get the chance to do just that.
 
