@@ -3,15 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Facades\DB;
+use Illuminate\Support\Facades\DB;
 
 class Garage extends Model
 {
-    protected $spaces_total;
-    protected $spaces_occupied;
-    public $attendant_phone_number;
-    public $hourly_rate;//assume this location charges $3/hr
-    public $step_increase;//assume this location's increase is 50% per step, aka multiply by 1.5
+    protected $fillable = ['spaces_total','spaces_occupied','phone_number','hourly_rate','step_increase'];
 
     public function makeSpaceAvailable(): bool
     {
@@ -51,5 +47,10 @@ class Garage extends Model
     {
         $this->refresh();
         return ($this->spaces_occupied < $this->spaces_total);
+    }
+
+    public function hasOccupiedSpaces(): bool
+    {
+        return ($this->spaces_occupied > 0);
     }
 }

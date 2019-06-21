@@ -1,8 +1,10 @@
 <?php
 
+use App\Providers\RouteServiceProvider;
+
 return [
 
-    'garage_id' => 1,
+    'garage_id' => env('GARAGE_ID', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -175,6 +177,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\PaymentServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
     ],

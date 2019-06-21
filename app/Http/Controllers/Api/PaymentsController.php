@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use Carbon\Carbon;
 use App\Models\Garage;
+use App\Models\Ticket;
+use App\Services\StripePaymentService;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 use App\Models\Payment;
-use Stripe\StripePaymentProcessor;
-use Illuminate\Facades\Request;
 
 class PaymentsController extends Controller
 {
@@ -19,18 +21,31 @@ class PaymentsController extends Controller
      */
     public function store(Request $request, Ticket $ticket)
     {
-        $ticket->exit();
+        $garage = Garage::find(config('app.garage_id'));
 
-        $payment = new Payment($ticket->getAmountDue(), $request->get('cc_num'));
+        $ticket->recordExit();
 
-        $paymentProcessor = new StripePaymentProcessor();
+        $succeed_payment = $request->input('succeed',true);
+        $cc_number = (string) $request->input('cc_number');
+
+
+        \Log::info('ticket: '.var_export($ticket->show($garage),true));
+
+        $amount_due = (float) $ticket->getAmountDue($garage);
+
+        \Log::info('XXXX: '.$amount_due.' - '.$cc_number.' - '.$succeed_payment); //**** WHY IS THIS ZERO ??? ****//
+
+        $payment = new Payment($amount_due, $cc_number);
+        $payment->ticket_id = $ticket->id;
+
+        $paymentProcessor = new StripePaymentService($succeed_payment);
 
         if(!$payment->make($paymentProcessor)){
-            throw new Exception('Your credit card was declined. Unable to pay: '.$ticket->getAmountDue());
+            return response()->json(['error' => 'Transaction Failed. Unable to pay: '.$amount_due], 417);
         }
 
-        $ticket->markAsPaid();
+        $ticket->markAsPaid($garage);
 
-        return json_encode('Thank you for your payment of '.$ticket->getAmountDue());
+        return response()->json(['message' => 'Thank you for your payment of '.$amount_due], 200);
     }
 }

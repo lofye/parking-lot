@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+use Exception;
 use App\Models\Garage;
 use App\Models\Ticket;
-use Illuminate\Facades\Request;
 
 class TicketsController extends Controller
 {
@@ -21,11 +23,11 @@ class TicketsController extends Controller
         $garage = Garage::find(config('app.garage_id'));
 
         if (!$garage->hasSpacesAvailable()) {
-            throw new Exception('There are currently no parking spaces available.');
+            return response()->json(['error' => 'There are currently no parking spaces available.'], 412);
         }
 
-        $ticket = new Ticket($garage);
-        $ticket->distribute();
+        $ticket = new Ticket();
+        $ticket->distribute($garage);
 
         return $ticket;
     }
@@ -38,7 +40,9 @@ class TicketsController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        return $ticket->show();
+        $garage = Garage::find(config('app.garage_id'));
+
+        return $ticket->show($garage);
     }
 
 }

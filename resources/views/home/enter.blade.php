@@ -2,7 +2,7 @@
 
 @section('content')
     <div>
-        either here's your ticket<br>
-        or sorry, no spaces available right now
+        <div>{{$message}}</div>
+        @if($ticket_number)<a href="/exit/{{$ticket_number}}">Pay & Exit</a>@endif
     </div>
 @stop

@@ -1,18 +1,30 @@
-# PARKING LOT TEST
+# PARKING LOT CHALLENGE
 
 Hi!
 
-Thanks for the opportunity to do this for you.
-I was very short on time, and in a bit of a rush, and didn't notice the bit about descriptive commit messages :(
-Altogether, I spent about 2 hours on it.
-Tihs README.md is my documentation. I didn't comment the code too much, and instead tried to make it descriptive.
-The code is essentially fancy pseudo-code, though. Not executable.
-Hope that's alright.
+Over the past few years, vehikl has built a good name for itself.
+As I've talked with Chris, I've only come to respect you even more.
+Thanks for the opportunity to do this coding challenge for you.
+You are the first dev shop I've come across that is dev-oriented, which is to say, focused on code quality, 
+and developer quality, and growing better developers.
+Except for my first job, I have always been the most senior developer wherever I've worked.
+On the one hand, that's meant I've had a lot of control, which has been fun.
+On the other hand, it's meant I haven't learned as much as I would have liked from my peers.
+I really see vehikl as a place that I can experience tremendous growth, and do the best work of my life.
+I hope I get the chance to do just that.
+
+Sincerely,
 
 Derek Martin
 
-------------
+Notes:
+- There is no concept of a USER in this application. Ticketing is anonymous.
+- The API has not been secured
+- I am not using Form Requests or doing any validation
+
 To get this running:
+- Ensure you have php >= 7.3
+- For curl to https://parking-lot.test to work properly, you may need to adjust your DNS: https://github.com/laravel/valet/issues/736
 - create a database called 'parkinglot' with default collation: utf8_general_ci, accessible by root with no password
 - composer install
 - php artisan migrate

@@ -15,7 +15,6 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->integer('id')->unsigned()->autoIncrement();
-            $table->string('email')->index();
             $table->integer('garage_id')->unsigned();
             $table->timestamp('enter_at')->nullable();
             $table->timestamp('exit_at')->nullable();

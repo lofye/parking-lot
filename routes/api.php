@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/tickets', 'Api/TicketsController@store');
-Route::get('/tickets/{ticket}', 'Api/TicketsController@show');
+Route::post('/tickets', 'Api\TicketsController@store');
+Route::get('/tickets/{ticket}', 'Api\TicketsController@show');
 
-Route::post('/payments/{ticket}', 'Api/PaymentsController@store');
+Route::post('/payments/{ticket}', 'Api\PaymentsController@store');

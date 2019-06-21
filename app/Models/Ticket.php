@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Models\Garage;
+use App\Models\Garage;
 
 class Ticket extends Model
 {
-    protected Garage $garage;
+    protected $fillable = ['enter_at','exit_at','paid_at'];
 
     /*
     * The attributes that should be mutated to dates.
@@ -21,42 +21,42 @@ class Ticket extends Model
         'paid_at'
     ];
 
-    public function __construct(Garage $garage)
+    public function distribute(Garage $garage)
     {
-        $this->garage = $garage;
-        $this->duration = abs($this->enter_at->diffInHours($this->exit_at));
-    }
-
-    public function distribute()
-    {
-        $this->garage->makeSpaceOccupied();
+        $this->garage_id = $garage->id;
+        $garage->makeSpaceOccupied();
         $this->enter_at = Carbon::parse(time());
         $this->save();
     }
 
-    public function exit()
+    public function recordExit()
     {
-        $this->exit_at = Carbon::parse(time());
+        $this->exit_at = Carbon::now();
         $this->save();
     }
 
-    public function markAsPaid()
+    public function markAsPaid(Garage $garage)
     {
-        $this->garage->makeSpaceAvailable();
-        $this->paid_at = Carbon::parse(time());
+        $garage->makeSpaceAvailable();
+        $this->paid_at = Carbon::now();
         $this->save();
     }
 
-    public function getAmountDue()
+    protected function calculateDuration()
     {
-        if (empty($this->enter_at) || empty($this->exit_at)) {
-            throw new \Exception('Invalid Ticket. Please Call Parking Attendant at ' . $this->garage->attendant_phone_number);
+        if(!empty($this->exit_at)){
+            return abs($this->enter_at->diffInHours($this->exit_at));
+        } else {
+            return abs($this->enter_at->diffInHours(Carbon::now()));
         }
+    }
 
-        $duration = $this->duration;
+    public function getAmountDue(Garage $garage)
+    {
+        $duration = $this->calculateDuration();
 
-        $hourly_rate = $this->garage->hourly_rate;//i.e. 3
-        $step_increase = $this->garage->step_increase;//i.e. 1.5
+        $hourly_rate = $garage->hourly_rate;//i.e. 3
+        $step_increase = $garage->step_increase;//i.e. 1.5
 
         if ($duration > 6) {
             //charge ALL DAY rate should be $15.19 assuming hourly_rate $3, step increase 50%
@@ -76,18 +76,13 @@ class Ticket extends Model
         return money_format('%.2n', $amount_due);
     }
 
-    public function show()
+    public function show(Garage $garage)
     {
-        try {
-            $amount_due = $this->getAmountDue();
-        } catch (\Exception $e) {
-            $amount_due = 'N/A';
-        }
-
-        return ['enter_at' => $this->enter_at->format('Y-m-d H:i:s'),
-                'exit_at' => $this->exit_at->format('Y-m-d H:i:s'),
-                'paid_at' => $this->paid_at->format('Y-m-d H:i:s'),
-                'duration' => $this->duration,
-                'amount_due' => $amount_due];
+        return ['id' => $this->id,
+                'enter_at' => (!empty($this->enter_at) ? $this->enter_at->format('Y-m-d H:i:s') : 'N/A'),
+                'exit_at' => (!empty($this->exit_at) ? $this->exit_at->format('Y-m-d H:i:s') : 'N/A'),
+                'paid_at' => (!empty($this->paid_at) ? $this->paid_at->format('Y-m-d H:i:s') : 'N/A'),
+                'duration' => $this->calculateDuration(),
+                'amount_due' => $this->getAmountDue($garage)];
     }
 }

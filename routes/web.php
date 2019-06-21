@@ -14,3 +14,5 @@
 Route::get('/', 'HomeController');
 Route::get('/enter', 'EnterController@index');
 Route::get('/exit', 'ExitController@index');
+Route::get('/exit/{ticket}', 'ExitController@show');
+Route::post('/exit/{ticket}', 'ExitController@store');
