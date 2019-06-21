@@ -3,26 +3,40 @@
 Hi!
 
 Over the past few years, vehikl has built a good name for itself.
-As I've talked with Chris, I've only come to respect you even more.
+As I've talked with Chris Keithlin & Brad Brothers, I've only come to respect you even more.
 Thanks for the opportunity to do this coding challenge for you.
+
 You are the first dev shop I've come across that is dev-oriented, which is to say, focused on code quality, 
 and developer quality, and growing better developers.
 Except for my first job, I have always been the most senior developer wherever I've worked.
 On the one hand, that's meant I've had a lot of control, which has been fun.
 On the other hand, it's meant I haven't learned as much as I would have liked from my peers.
-I really see vehikl as a place that I can experience tremendous growth, and do the best work of my life.
+I've also never really worked anywhere that appreciated the need for developers to grow, and the chaos that can come 
+from technical debt and poor code quality. I've read the Bob Martin books, and I pressure myself to adhere to what they
+say, but I've never had an entire team working that way, and it sounds awesome.
+Lastly, I have always been the one pushing agile wherever I've worked. Usually, they just put up with me. Nobody on the
+team was really into it. When you don't have buy-in from the team, it doesn't work very well. I have only worked one
+place (Achievers.com) that really did agile, and it was energizing. I would *really* like to do that again.
+I see vehikl as a place that I can experience tremendous growth, and do the best work of my life.
 I hope I get the chance to do just that.
 
 Sincerely,
 
 Derek Martin
 
-Notes:
+-------------
+
+## Notes:
+
 - There is no concept of a USER in this application. Ticketing is anonymous.
 - The API has not been secured
 - I am not using Form Requests or doing any validation
+- I don't prevent you from paying for the same ticket multiple times
 
-To get this running:
+-------------
+
+## To get this running:
+
 - Ensure you have php >= 7.3
 - For curl to https://parking-lot.test to work properly, you may need to adjust your DNS: https://github.com/laravel/valet/issues/736
 - create a database called 'parkinglot' with default collation: utf8_general_ci, accessible by root with no password

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use GuzzleHttp\Psr7;
 use GuzzleHttp\Client as RestClient;
 use App\Models\Ticket;
 
@@ -30,7 +31,7 @@ class ExitController extends Controller
         if(isset($body->error)){
             $message = $body->error;
         } else {
-            $message = 'Ticket: '.$body->id.'. Hours: '.$body->duration.'. Amount Due: '.$body->amount_due;
+            $message = 'Ticket: '.$body->id.' :: Hours: '.$body->duration.' :: Amount Due: '.$body->amount_due;
         }
 
         return view('home.exit_form', ['message' => $message, 'ticket_number' => $ticket->id]);
@@ -38,24 +39,38 @@ class ExitController extends Controller
 
     public function store(Request $request, Ticket $ticket)
     {
-        $client = new RestClient();
-        $response = $client->request('POST', 'https://parking-lot.test/api/payments/'.$ticket->id,
-        [
-            'verify' => false,
-            'form_params' => [
-                    'succeed' => $request->input('succeed'),
-                    'cc_number' => $request->input('cc_number')
-            ]
-        ]);
+        try{
+            $client = new RestClient();
+            $response = $client->request('POST', 'https://parking-lot.test/api/payments/'.$ticket->id,
+                [
+                    'verify' => false,
+                    'form_params' => [
+                        'succeed' => $request->input('succeed'),
+                        'cc_number' => $request->input('cc_number')
+                    ]
+                ]);
+            $body = (object) json_decode($response->getBody()->getContents(),true);
 
-        $body = (object) json_decode($response->getBody()->getContents(),true);
+            if(isset($body->error)){
+                $message = $body->error;
+            } else {
+                $message = $body->message;
+            }
+            $success = true;
 
-        if(isset($body->error)){
-            $message = $body->error;
-        } else {
-            $message = $body->message;
+        }catch(\Exception $e)
+        {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+                $message = $body->error;
+            } else {
+                $message = 'Unknown Error';
+            }
+            $success = false;
         }
 
-        return view('home.exit', ['message' => $message]);
+
+        return view('home.exit', ['message' => $message, 'success' => $success]);
     }
 }

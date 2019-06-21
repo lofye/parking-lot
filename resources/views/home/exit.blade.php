@@ -4,6 +4,6 @@
 
     <div>
         <div>{{$message}}</div>
-        <div>The gate is open.</div>
+        @if($success)<div>The gate is open.</div>@endif
     </div>
 @stop

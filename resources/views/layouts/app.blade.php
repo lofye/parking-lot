@@ -77,7 +77,7 @@
 
         <div class="content">
             <div class="title m-b-md">
-                Tickets
+                Parking Tickets
             </div>
 
             @yield('content')

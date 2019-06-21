@@ -51,7 +51,7 @@ class Ticket extends Model
         }
     }
 
-    public function getAmountDue(Garage $garage)
+    public function getAmountDue(Garage $garage, bool $format_result = true)
     {
         $duration = $this->calculateDuration();
 
@@ -70,6 +70,10 @@ class Ticket extends Model
         } else {
             //charge 1 hour minimum should be $3.00 assuming hourly_rate $3, step increase 50%
             $amount_due = $hourly_rate * 1;
+        }
+
+        if(!$format_result){
+            return $amount_due;
         }
 
         setlocale(LC_MONETARY, 'en_US.UTF-8');
